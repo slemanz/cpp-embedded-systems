@@ -81,4 +81,15 @@ translation is shorter, uses fewer words, and reads closer to English.
 Range-based loops, introduced in C++ 11, remove the cognitive burden of carrying
 the container's size into the loop condition.
 
-### Generic types
+### Generic Types
+
+The previous example used the std::array standard library container, a class
+template that wraps a C-style array together with its size information. When a
+std::array is used with a specific underlying type and size, the compiler
+defines a new type during istantiation. `std::array<int, 10>` creates a
+container type whose underlying C-style array holds 10 integers, while
+`std::array<int, 20>` creates a container type whose underlying array holds 20
+integers. These two are different types, they share the same underlying type but
+differ in size. `std::array<float, 10>` would yeld a third type. Therefore,
+different parameters, produce different types, and template types are generic
+types that become concrete only upon instatiation.
