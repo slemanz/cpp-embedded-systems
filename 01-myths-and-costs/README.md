@@ -49,3 +49,36 @@ becomes too verbose, which results in larger code bases). The remaining barriers
 are myths, that C++ is just "C with classes" that is unacceptable for safety
 critical systems because of dynamic memory allocation in the standard library,
 or it produces a lot of bloated code and adds space and time overhead.
+
+## C with Classes
+
+C++ is more than C with classes as we can see in this code in C and its version
+in C++:
+
+```c
+#define N 20
+
+int buffer[N];
+
+for(int i = 0; i < N; i++)
+{
+    printf("%d ", buffer[i]);
+}
+```
+
+```cpp
+std::array<int, 20> buffer;
+
+for(const auto& element : buffer)
+{
+    printf("%d ", element);
+}
+```
+
+The C code defines a constant N to fix the buffer's size, then uses that same
+constant both to declare and as stop condition of the indexed loop. The C++
+translation is shorter, uses fewer words, and reads closer to English.
+Range-based loops, introduced in C++ 11, remove the cognitive burden of carrying
+the container's size into the loop condition.
+
+### Generic types
