@@ -93,3 +93,16 @@ integers. These two are different types, they share the same underlying type but
 differ in size. `std::array<float, 10>` would yeld a third type. Therefore,
 different parameters, produce different types, and template types are generic
 types that become concrete only upon instatiation.
+
+## Ring Buffer
+
+The ring buffer makes the case for generic types concrete, because the same
+container has to be written three times in C before it does what one C++
+template does. In a first example [rb_c_typec.c](examples/rb_c_typed.c), a
+struct holds an int arr[BUFFER_SIZE] with write index and read index, and count,
+it is simple and safe, but it only works for int. The second example,
+[rb_c_void.c](examples/rb_c_void.c), erases the type by storing raw bytes and an
+elem_size, copying values in and out with memcpy. One implementation now,
+servers for every type, at the price of all type safety (pushing a float into a
+buffer initialized with sizeof(int) compiles cleanly and the compiler says
+nothing).

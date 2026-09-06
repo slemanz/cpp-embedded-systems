@@ -9,6 +9,7 @@ CFLAGS = -Wall -Wextra -std=c99 -g
 CXXFLAGS = -Wall -Wextra -std=c++17 -g
 
 EXAMPLES += $(DIR_BUILD)/rb_c_typed
+EXAMPLES += $(DIR_BUILD)/rb_c_void
 
 PREREQ = $(DIR_BUILD)
 

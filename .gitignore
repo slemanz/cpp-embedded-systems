@@ -1,10 +1,10 @@
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-
-# Manim outputs
-media/
+# build files
+build
+Build
+*.o
+*.bin
+*.map
+*.elf
 
 # vscode
 .vscode
