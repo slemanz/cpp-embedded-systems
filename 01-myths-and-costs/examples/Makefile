@@ -11,6 +11,7 @@ CXXFLAGS = -Wall -Wextra -std=c++17 -g
 EXAMPLES += $(DIR_BUILD)/rb_c_typed
 EXAMPLES += $(DIR_BUILD)/rb_c_void
 EXAMPLES += $(DIR_BUILD)/rb_c_macro
+EXAMPLES += $(DIR_BUILD)/rb_cpp
 
 PREREQ = $(DIR_BUILD)
 
