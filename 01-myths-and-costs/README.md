@@ -118,3 +118,28 @@ ring_buffer_int_5 rb;
 ring_buffer_init_int_5(&rb);
 ring_buffer_push_int_5(&rb, i);
 ```
+
+```cpp
+ring_buffer<int, 5> rb;
+rb.push(i);
+
+while (!rb.is_empty())
+{
+    printf("%d ", rb.pop());
+}
+```
+
+The C++ version in [rb_cpp.cpp](examples/rb_cpp.cpp) example, show the same
+guarantees that macro, an it is more readble and easier to use. The ring_buffer
+template can be instatiaded with intenger, float, or any other type and any
+size, so `ring_buffer<int, 5>` and `ring_buffer<float, 3>` coexist without a
+new implementation. The same push-and-pop logic is written once and applies to
+every instantiation. which means the Dont Repeat Yourself (DRY) principle can be
+applied across different types.
+
+Templates are also used for template metaprogramming (TMP), a technique in which
+the compiler uses a template to generate temporary source code, merges it with
+the rest of the source, and compiles the result.
+
+## constexpr
+
