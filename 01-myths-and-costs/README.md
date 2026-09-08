@@ -105,4 +105,16 @@ it is simple and safe, but it only works for int. The second example,
 elem_size, copying values in and out with memcpy. One implementation now,
 servers for every type, at the price of all type safety (pushing a float into a
 buffer initialized with sizeof(int) compiles cleanly and the compiler says
-nothing).
+nothing). The third, [rb_c_macro.c](examples/rb_c_macro.c), uses the
+token-pasting operator to generate a ring_buffer_int_5 type together with its
+init, push, and pop functions. That version is finally type-safe and
+size-parametric, which is what was wanted, but the cost is paid in readability,
+the caller must know what the macro-expands before calling anything.
+
+```c
+DECLARE_RING_BUFFER(int, 5)
+
+ring_buffer_int_5 rb;
+ring_buffer_init_int_5(&rb);
+ring_buffer_push_int_5(&rb, i);
+```
