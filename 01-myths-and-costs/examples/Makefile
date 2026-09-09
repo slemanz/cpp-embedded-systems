@@ -12,6 +12,8 @@ EXAMPLES += $(DIR_BUILD)/rb_c_typed
 EXAMPLES += $(DIR_BUILD)/rb_c_void
 EXAMPLES += $(DIR_BUILD)/rb_c_macro
 EXAMPLES += $(DIR_BUILD)/rb_cpp
+EXAMPLES += $(DIR_BUILD)/ohms_law_macro
+EXAMPLES += $(DIR_BUILD)/ohms_law_constexpr
 
 PREREQ = $(DIR_BUILD)
 
