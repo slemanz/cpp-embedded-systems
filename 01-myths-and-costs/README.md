@@ -143,3 +143,35 @@ the rest of the source, and compiles the result.
 
 ## constexpr
 
+C++11 introduced the constexpr specifier, which declares that the value of a
+function or a variable can be evaluated at compile time, so it must be
+initialized immediately and have a literal type, as in a "constexpr double pi =
+3.14159;". It is the preferred way of declaring compile-time constants,
+replacing the C-Style macro approach, as we can se in the
+[ohms_law_macro.c](examples/ohms_law_macro.c) example, with VOLTAGE and CURRENT
+defined, computing const float resistance will print 3.00 (should be 3.30),
+because both macros are parsed as integer literals and so is the division
+(floating-point literals need the f suffix, ommited in the example). Rewriting
+them in [ohms_law_constexpr.c](examples/ohms_law_constexpr.cpp) example with
+constexpr will give resistance = 3.30, since the specifier allows the type of
+each constant to be stated. Compile-time constants are therefore safer and
+easier to read than macro constants.
+
+The specifier also can be used to hint that a function can be evalueted at
+compile time, which requires a literal return type, literal parameters, and, for
+non-constructors, precisaly one return statement. In the code
+[square_runtime.s](examples/square_runtime.s) we can see the assembly of a plain
+`int square(int a)` called as square(2) (compiled in [compiler
+explorer](https://godbolt.org/)) with arm gcc none and no optimization). So we
+can see that the function manipulates the stack pointer, calls the function,
+stores the value returned in r0, reloads it into r3, and moves it back to r0
+(the ARM calling convetion's register to return values). Those unecessary
+operations increase binary size and affect performance, and since the code is
+valid C and valid C++, both compilers produce the same output. Marking the
+function as `constexpr int ret = square(2);` changes the code generated to
+[square_constexpr.s](examples/square_constexpr.s), so there is no square
+function at all, only the value 4 that the compiler already computed. Heavy
+computation can thus move from runtime to compile time whenever all parameters
+are known.
+
+## Bloat and runtime overhead
