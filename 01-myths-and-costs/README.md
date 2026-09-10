@@ -175,3 +175,45 @@ computation can thus move from runtime to compile time whenever all parameters
 are known.
 
 ## Bloat and runtime overhead
+
+One common myth about C++ is that it produces bloated code and adds runtime overhead.
+
+### Contructors and Destructors
+
+Objects in C++ are instances of classes, variables that occupy memory and are
+created by special functions called constructors. Constructors initialize
+objects, including the initialization of class members, while destructors clean
+up resources, and both are tied to an object lifecycle (the object is created by
+a constructor and the destructor is called when the object goes out of scope).
+Both also increase binary size and add runtime overhead, since executing them
+takes time. We can se a first example of this in
+[trivial_class_o0.s](examples/trivial_class_O0.s), where we have a private
+number, a constructor that sets it, an empty destructor, and a getter,
+instantiated once in main. Compiled with no no optimization enabled, this
+simples abstraction produces 59 lines of assembly code (labels for each function
+and a large number of instructions). This is the exactly kind of bloat code that
+is undesirable in our embedded code.
+
+We can observe that the destructor does nothing useful, so we can remove it,
+then we will reduce the code to 44 lines, with no destructor code and no call to
+it. With this we can learn that **you don't pay for what you don't use**, which
+is one of the design principles of C++. As one second observation, is that C++
+is not an OOP language but a multiparagigm (procedural, object-oriented, generic
+and even functional). Private members settable throgh constructors have a price,
+since structs in C++ have public members for default, we can rewrite the
+previous code as [trivial_struct.s](examples/trivial_struct.s), we can drop the
+assembly to 12 lines. Here we can say two thing, we don't pay for what we don't
+use, and **using C++ does not bind the developer to an OPP paragim**.
+
+Until now, all the examples were compiled with optimizations disabled, which is
+why the assembly contains unnecessary operations that could be removed. We can
+compile the first class example with optimization level O3, so we will get this
+[trivial_class_O3.s](examples/trivial_class_O3.s), as we can see it reduced the
+whole program to two instructions. The value of num obj is placed in r0 as the
+return value, and everything else disappears. All the stack manipulation is
+stripped away. Removing unnecessary instructions is therefore the job of the
+optimization process rather than something the programmer must hand-tune. Even
+so, optimization is often avoided in embedded projects, based on the claim that
+it breaks code.
+
+### Optimization
