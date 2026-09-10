@@ -253,3 +253,18 @@ keeping the binary footprint minimal and performance maximum, the highest level
 (-O3) is used throughout this repo.
 
 ### Templates
+
+Instantiating templates with different parameters causes the compiler to
+generate distinct types, which increases binary size, an expected outcome, and
+the same situation arises with generic ring buffer implemented in C using the
+token-pasting operator and macros as we already seen. The price in binary size
+is paid either way. And generally the difference in creating the types in C
+style and using templates will be a few bytes greater in templates.
+
+But it's important to say that templates do affect build time, because concrete
+types are instantiated in different compilation units, though techniques exist
+to avoid this when needed. All functions related to instantiated types sharing
+the same parameters collapse into a single function in the binary, since the
+liker removes duplicate symbols.
+
+### RTTI and exceptions
