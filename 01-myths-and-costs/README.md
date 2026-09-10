@@ -268,3 +268,42 @@ the same parameters collapse into a single function in the binary, since the
 liker removes duplicate symbols.
 
 ### RTTI and exceptions
+
+Runtime type information (RTTI) is a mechanism that allows the type of an object
+to be determined at runtime. Most compilers implement RTTI using virtual tables,
+so every polymorphic class (a class with at least one virtual function) has a
+vtable that among other things, carries the type information used for runtime
+type identification. This imposes both time and space costs, increasing binary
+size and affecting runtime performance whenever type identification is used,
+which is why compilers provide a way of disabling it. We can see the example in
+[rtti_dynamic_cast.cpp](examples/rtti_dynamic_cast.cpp), a Base struct with a
+virtual print, a Derived struct that overrides it, and a printer that takes a
+reference to Base, called once with each object.
+
+The program prints Base, and then Derived, because classes with virtual
+functions use their vtables for dynamic dispatch, the process of selecting which
+implementation of polymorphic function is executed. Depending on whether a Base
+or a Derived reference is passed to printer, dispatching selects the
+corresponding print method. Since vtables also store type information,
+dynamic_cast can recover the concrete type from a reference or pointer to the
+superclass, and adding such a cast inside a printer makes the program report
+that the type was found through RTTI. In GCC, RTTI is disabled with the
+`-fno-rtti` flag, and compiling that will fail. RTTI is useful in certain
+scenarios, but it adds massive overhead on resource-constrained devices, so we
+must leave disabled.
+
+Exceptions are another C++ feature often disabled in embedded code, they are an
+error-handling mechanism based on try-catch block, we can see this in the
+example [exceptions_unwinding.cpp](examples/exceptions_unwinding.cpp), with two
+struct A and B, that print a message in their constructor and destructor. A
+function bar creates a local b and throws, while foo creates a local a and calls
+bar, and would create a second object afterwards. Calling foo inside a try block
+produces the sequence: A created, B created, B destroyed, A destroyed, and only
+then the catch block executed. This is what we call as **stack unwinding**, and
+to make it happen standard implementation most commonly rely on unwind tables,
+which store information about catch handlers, destructors to be called, an so
+on. These tables can grow large and complex, increasing the memory footprint of
+the application and introducing non-determinism because of the runtime mechanism
+used for exception handling.
+
+## Embedded Systems with Limited Resources
