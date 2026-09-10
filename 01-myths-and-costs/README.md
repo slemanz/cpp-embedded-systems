@@ -217,3 +217,39 @@ so, optimization is often avoided in embedded projects, based on the claim that
 it breaks code.
 
 ### Optimization
+
+Unoptimized code results in unnecessary instructions that affect both binary
+size and performance, yet many embedded projects are still built with
+optimization disabled because developers do not trust the compiler and fear it
+will break the program. There is come truth to the fear, but it only
+materializes when the program is not well formed (when it contains undefined
+behavior). One of the best-known examples of undefined behavior is signed
+interger overflow, the standard does not define what happens when 1 is added to
+the maximum value of a signed integer on the target platform, and the program is
+not required to do anything meaningful in that case. The behavior can be
+demonstrated with a small function that takes an integer, adds 1 to it, and
+returns whether the result is greater than the original value:
+
+```c
+int foo(int x)
+{
+    int y = x + 1;
+    return y > x;
+}
+```
+
+Compile with GCC for both x86 and Arm Cortex-M4, the results are the same.
+Without optimization, passing the maximum value, the function returns 0 and the
+program reports that X is not larger than X+1, the compiler performs the integer
+overflow, though the standard does not specify this and the behavior depends on
+the compiler. With optimization enabled, the function returns 1 and the program
+reports the opposite, because the generated code performs no calculation at all,
+the compiler assumes the program is well formed and free of undefined behavior.
+
+Compiler bugs that break functionality only under optimization are rare but not
+unheard of, which is why unit and integration testing exists to validate
+behavior in both builds. Optimization is essential for C++ abstractions while
+keeping the binary footprint minimal and performance maximum, the highest level
+(-O3) is used throughout this repo.
+
+### Templates
