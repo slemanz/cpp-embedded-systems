@@ -14,6 +14,8 @@ EXAMPLES += $(DIR_BUILD)/rb_c_macro
 EXAMPLES += $(DIR_BUILD)/rb_cpp
 EXAMPLES += $(DIR_BUILD)/ohms_law_macro
 EXAMPLES += $(DIR_BUILD)/ohms_law_constexpr
+EXAMPLES += $(DIR_BUILD)/rtti_dynamic_cast
+EXAMPLES += $(DIR_BUILD)/exceptions_unwinding
 
 PREREQ = $(DIR_BUILD)
 
