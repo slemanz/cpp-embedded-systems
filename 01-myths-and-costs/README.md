@@ -456,3 +456,25 @@ without inspection. For this reason, a local allocator is usually the better
 choice.
 
 ### Disabling unwanted C++ features
+
+We should use printf from the C standard library instead of std::cout from the
+C++ Standard library for two reasons, the std:cout global object from ostream
+has a large memory footprint and uses dynamic memory allocation. Because C++
+works well with the C standard library, printf is a good alternative for
+resource-constrained systems. 
+
+Unwanted C++ features can also be disabled through compiler flags, in GCC,
+`-fno-exceptions` disables handling mechanism, which often relies on dynamic
+allocation, and `-fno-rtti` disables Run-Time Type Information (RTTI). With
+exceptions disabled, throwing an expection call std::terminate, but the default
+handler can be replaced through std::set_terminate, this makes possible to
+handle cases that should not happen at runtime and either recover or terminate
+gracefully.
+
+Some features cannot be disabled by flags, but other means exist. Beyond
+redefining the global new and delete operators, they can be deleted, including
+the array, std::align_val_t, and std::nothrow_t versions. A program that then
+uses a component calling new, such as a std::vector with push_back, fails to
+compile with an error about the use of the deleted operator new(std::size_t,
+std::align_val_t). This guarantees that the program is not using dynamic memory
+management.
