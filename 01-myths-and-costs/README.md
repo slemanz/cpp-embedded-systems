@@ -390,3 +390,69 @@ Industry Software Reliability Association (MISRA) and Automotive Open System
 Architecture (AUTOSAR) discourage dynamic memory.
 
 ### Dynamic memory management
+
+Memory fragmentation is one way that dinamic allocation can fail, even with
+plenty of free memory, a request for some size of units can return NULL, because
+of no contigouos blocks can not be available. Beyond the non-dterministic
+behavior of default allocators, out-of-memory scenarios are a major concern for
+safety-critical system, and MISRA and AUTOSAR provive docing guidelines for
+using C++ in such systems. 
+
+MISRA is an organization formed by vehicle manufacturers, component suppliers,
+and engineering consultancies that produces guidelines for automotive electronic
+components, and its standards are also used in aerospace, defense, space,
+medical, suppliers and companies from the electronics, semiconductor and
+software industries. MISRA C++ 2008, which covers C++03, prohibits dynamic
+memory allocation. AUTOSAR Guidelines for the use of the C++14 language in
+critical and safety-related systems instead specifies a rule, which requires
+memory management functions to ensure deterministic behavior with an existing
+worst-case execution time, avoid fragmentation, avoid running out of memory,
+avoid mismatched allocations or deallocations, and not depend on
+non-deterministic kernel calls, and other rule which requires an analysis of
+these same failure modes.
+
+Following these rules to the letter is extremely hard. A custom allocator can
+have a deterministic WCET and minimize fragmentation, but avoiding out-of-memory
+conditions would require either verifying every allocation and mitigating
+failures, or accurately estimating the memory needed so it never runs out at
+runtime under any circustances. This adds more complexity than the value gained
+by allowing dynamic allocation at startup but not while the system is running,
+which is the approach of the Joint Strike Fighter Air Vehicle C++ Conding
+Standard. MISRA C++ 2023 also advises against runtime allocation and recommends
+startup allocation as a mitigation. The issue matters because the C++ standard
+library uses dynamic allocation heavily, and exception handling implementation
+often do as well. 
+
+Containers in the C++ standard library allocate memory as they grow, and
+std::vector is a representative case. A vector stores its elements contigously,
+and its usual strategy is to allocate a single element on the first insertion
+and double the capacity each time it is reached. When its memory is full, it
+requires a block twice the size of the current one, copies the data into the new
+storage, and deletes the previous block, so a growing vector produces a sequence
+of allocations and deallocations, with the same behavior under GCC x86_64 and
+Arm Cortex-M4. These requests can be monitored on any platform by overloading
+the global new and delete operators, and the same overloading principle replace
+the allocation mechanism globally to meet the guidelines on deterministic WCET
+and out-of-memory scenarios, although doing so is quite challenging. When the
+number of elements is known beforehand, the reserve method requests all the
+memory at once, and more is requested only if the amount is exceeded. This fits
+a policy that allows allocation at startup, as long as the element count is
+guaranteed to stay within the reserved memory.
+
+The standard library also supports local allocators, since the second template
+parameter of a container is its allocator, which defaults to std::allocator,
+based on new and delete. C++17 introduced `std::pmr::polymorphic_allocator`,
+whose behavior depends on the `std::pmr::memory_resource` it is constructed
+from, and `std::pmr::vector` is simply `std::vector` using this allocator. One
+such resource, `std::pmr::monotonic_buffer_resource`, is built for performance,
+releases memory only when destroyed, and can be initialized with a statically
+allocated buffer, which makes it suitable for embedded applications. Each
+request is served from the remaining space in the buffer, but once the buffer
+cannot satisfy a request, the resource falls back to its upstream memory
+resource, which by default uses new and delete. Replacing those operators
+globally is even more challenging that it seems, because the standard library
+defines several versions of them, and which one a container uses is hard to tell
+without inspection. For this reason, a local allocator is usually the better
+choice.
+
+### Disabling unwanted C++ features
