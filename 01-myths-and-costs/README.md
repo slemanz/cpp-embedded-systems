@@ -344,3 +344,49 @@ outside firmware responsibilities, the firmware job is to feed the algorithm
 sensor data on time, execute it within a set time window, and act on its output.
 
 ### Measuring firmware performance and non-determinism
+
+Ensuring that firmware meets its real-time requirements depends on measurement.
+Useful metrics include performance profiling, which shows in which functions the
+program spends the most time, response to external events, which shows how long
+the system takes to react to an interrupt or a message on a communication bus,
+and A-B timing, the most important metric for real-time requirements. A-B timing
+measures how long firmware takes to execute from point A to point B, which is
+not necessarily a function's duration, and this can vary with system state and
+inputs. The simplest method is toggling an IO and measuring the interval with an
+osciloscope, but it does not scale, since it requires an IO per function or
+measuring one function at time. A microcontroller timer with ouput over UART
+allows precise measurement but ties up a general-purpose timer. For this reason,
+most microcontrollers have a Data Watchpoint and Trace (DWT) unit, which
+supports program counter (PC) sampling and cycle counting and outputs events
+through ITM unit. ITM can also output printf-style data from the firmware,
+buffering it and sending it to an ITM sink such as SWO.
+
+These units enable both profiling and instrumentation. DWT can periodically
+sample the PC and send the samples through ITM over SWO to a host machine, where
+the firmware's linker map file is used to generate the distribution of time
+spent in each function. This shows where the program spends most of its time
+without direct software instrumentation beyond setting the DWT and ITM, but it
+is not particularly useful for A-B timing. For that, the GNU Compiler Collection
+(GCC) offers the `-fintrument-functions` flag which inserts calls to
+`__cyg_profile_func_enter` and `__cyg_profile_func_exit` at each function's
+entry an exit. These functions, declared with extern "C", so the compiler are
+able to link, can print the functions address and the DWT cycle count with
+redirect to ITM printf, enabling A-B timing analysis on the host. Alternatively,
+they can send ITM timestamps with function addresses, and the linker map file
+then reconstructs the sequence of calls and returns.
+
+A-B timing measuring can also reveal whether a function is deterministic. **A
+function is deterministic when it produces the same duration and output for the
+same inputs, and non deterministic when it depends on a global state and its
+measured duration varies for the same inputs**. Default dynamic memory
+allocators in C++ tend to be non-deterministic, because allocation time depends
+on the allocator's current global states and the complexity of its algorithm.
+Durations can be measured for the same inputs under different global states, but
+evaluating all possible states and guaranteeing the Wort-Case Execution Time
+(WCET) with default allocators is hard. Non-determinism is not the only problem
+for safety-critical system, allocation can also fail when no memory is available
+or when memory is fragmente. This is why safety coding standards such as Motor
+Industry Software Reliability Association (MISRA) and Automotive Open System
+Architecture (AUTOSAR) discourage dynamic memory.
+
+### Dynamic memory management
