@@ -307,3 +307,40 @@ the application and introducing non-determinism because of the runtime mechanism
 used for exception handling.
 
 ## Embedded Systems with Limited Resources
+
+Embedded systems are specialized computing systems built for a specific use with
+a limited set of responsabilities, in contrast to general-purpose computing
+systems. The boundary between the two categories is not always clear, the system
+that controls a toaster or a pup in an airplane is clearly an embedded systems,
+and cellphones and early smartphones were also considered embedded systems, but
+modern smartphones are closer to general-purpose computing devices. Our focus is
+firmware development using modern C++ on small, resource-constrained embedded
+systems. These systems are often employed in safety-critical applications, where
+they are responsible for controlling a process in a timely manner, and they
+cannot fail, since a failure can mean the loss of human lives.
+
+### Safety-critical and Real-time
+
+Safety-critical embedded systems often impose hard-real time requirements,
+meaning that any missed deadline results in system failure. An Airbag Control
+Unit (ACU) illustrates this, it collects data from accelerometes and presure
+sensors, runs an algorithm that processes the data to detect side, front, and
+rear-end crashes, and then controls the deployment of restraint systems such as
+airbags and seat belt tensioners. ACU implementations must be resilient to
+malfunctioning sensors and electronics, which is handled through redudant
+sensors, comparison of data between sensors, comparison against thresholds, and
+self-tests. Most importantly, an ACU has only a couple of milliseconds to
+collect data, make decisions, and initiate deployment. It fails not only when it
+does not detect a crash on time, but also when it deploys restraint systems
+slightly too late, because a late deployment can harm the driver and passengers
+more than no deployment at all. For this reason, an ACU must meet hard-real time
+requirements, and for firmware this means that all worst-case execution must be
+predictable.
+
+Sensor and electronics faults are mitigated by redundancy, data sanity checks,
+cross-comparison, and startup and runtime self-tests, which puts additional
+stress on firmware. Algorithm failures, such as bad underlying model, fall
+outside firmware responsibilities, the firmware job is to feed the algorithm
+sensor data on time, execute it within a set time window, and act on its output.
+
+### Measuring firmware performance and non-determinism
