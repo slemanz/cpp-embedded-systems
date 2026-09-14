@@ -39,4 +39,25 @@ measure function execution time and analyze software performance. Most embedded
 integrated development environments (IDEs) provide project creation and
 organization, build automation, and debugging. Some development environments go
 further and integrate more advanced features for code analysis, namely static
-analysis and profiling with performance analysis.
+analysis and profiling with performance analysis.td::
+
+### Arm Keil MDK and Arm Compiler for Embedded
+
+Arm Keil MDK is a set of tools for embedded development on mostly Arm Cortex-M
+microcontrollers, comprising Keil Studio (a set of extensions for VS Code), Keil
+uVision (a legacy Windows-based IDE), Arm Compiler for Embedded, and Arm Virtual
+Hardware. Both IDEs cover project configuration for different targets, build,
+and debugging on target; uVision integrates PC-Lint for static analysis, a
+simulator, and a profiler within its debugger, while Keil Studio can be
+configured to use clang-tidy or cppcheck.
+
+Arm Virtual Hardware Fixed Virtual Platforms runs binaries on simulated targets
+in the cloud, providing infrastructure for CI/CD. MDK comes in a non-commercial
+Community version and the commercial Essential and Professional editions, with
+only Professional offering functional safety support and the FuSa compiler
+certified to IEC 61508, ISO 26262, EN 50128, and IEC 62304. The compiler
+toolchain consists of armclang, an LLVM-based compiler, armlink, Arm C
+libraries, and Arm C++ libraries based on LLVM libc++. Arm Compiler supports
+C++17 and the FuSa 6.16 version supports C++14, showing how slowly commercial
+compilers adopt the latest standards (C++20 and C++23 were already released)
+which leaves the newest language features unavailable in these environments.
