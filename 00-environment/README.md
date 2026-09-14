@@ -60,4 +60,23 @@ toolchain consists of armclang, an LLVM-based compiler, armlink, Arm C
 libraries, and Arm C++ libraries based on LLVM libc++. Arm Compiler supports
 C++17 and the FuSa 6.16 version supports C++14, showing how slowly commercial
 compilers adopt the latest standards (C++20 and C++23 were already released)
-which leaves the newest language features unavailable in these environments.
+which leaves the newest language features unavaients.
+
+### IAR Compiler and Workbench
+
+IAR Embedded Workbench, from the Swedish company, is a development environment
+for Arm Cortex-M, Cortex-R, and Cortex-A cores that integrates an IDE with
+debugger and profiler, the IAR C/C++ Compiler, the C-STAT static analyzer, and
+C-RUN for runtime analysis. Beyond standard tools such as a debugger, the IDE
+offers more advanced embedded capabilities, including profiling and running
+firmware in a simulator. C-STAT can run static analysis against safety coding
+standards such as MISRAC++2008, while C-RUN instruments the code to cover heap
+checks, bounds checking, buffer overrun, integer overflow, and other runtime
+checks. The compiler supports C++17 from version 9.30.1, and the FuSa version of
+IAR Embedded Workbench for Arm 9.50.3, released in February 2024, also provides
+C++17 support. Together with Arm Compiler for Embedded, IAR represents the
+commercial option for embedded development, and the strength of both is that,
+alongside commercial support, they provide safety-qualified versions for
+safety-critical projects. Some microcontroller vendors instead provide their own
+development environments, usually based on Eclipse, with additional support for
+their own products.
