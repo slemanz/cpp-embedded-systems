@@ -80,3 +80,44 @@ alongside commercial support, they provide safety-qualified versions for
 safety-critical projects. Some microcontroller vendors instead provide their own
 development environments, usually based on Eclipse, with additional support for
 their own products.
+
+### Vendored IDE, GCC and Compiler Explorer
+
+An alternative to commercial development environments are vendor-supported
+environments based mostly on Eclipse together with GNU Compiler Collection (GCC)
+tools and the GNU Project Denugger (GDB), with STM32CubeIDE by ST and MCUXpresso
+by NXP. These tools are packed with code configurator UIs that generate C code
+for GPIO configuration, clock setup, and peripheral driver initialization. Other
+vendors, such as Nordic Semiconductor, opted for VS Code as the basis of their
+IDE solution and provide plugins for GPIO configuration and debugging,
+benefiting from plugins such as IntelliSense for code completion, parameter
+information, and syntax highlighting, GCC itself is one of the most used C and
+C++ compilers in general, free software, and the most popular choice for
+non-critical applications that do not require a qualified compiler. Even GCC can
+be qualified, however, the process involves compiling and running test programs
+and comparing outputs against expected results, documenting every issue found,
+and putting a process in place to mitigate them.
+
+Besides the compiler, GCC, includes an assembler and a linker, exposed through a
+driver program (gcc for C and g++ for C++), that runs preprocessing,
+compilation, assembly, and linking in sequence. For a single file such as
+main.cpp the preprocessor adds all header files specified with #include and
+expands macros in the translation unit, the compiler turns that result into
+assembly: the assembly stage produces an object file and the linker links it
+with the C and C++ standard libraries to generate an ELF file. Intermediate
+outputs can be inspected with additional arguments, such as the -E flag for
+preprocessor output, which can also be explored in Compiler Explorer, an
+interactive online compiler. In a hello world example using ARM GCC 11.2.1
+(none), the preprocessor expands cstdio into 808 lines, and the assembly view
+shows printf optimized into puts, whose body is absent because it comes from the
+linked standard library.
+
+Producing code that actually runs on a microcontroller additionaly requires
+clock and peripheral initialization code, architecture and instruction-set
+compiler flags, a startup assembly script with a reset handler and C and C++
+runtime initialization, a linker script defining RAM and Flash memory regions,
+and instructions to link against specific standard libraries. The resulting ELF
+file is converted to binary or hex with objdump or flashing. From version 10,
+GCC also has an integrated static analyzer, enabled with the -fanalyzer flag.
+
+## Static analyzers
