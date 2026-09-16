@@ -146,3 +146,40 @@ that the code does what it is supposed to do, which requires manual tests on a
 target or unit testing of individual pieces of code.
 
 ## Unit testing
+
+Unit testing is the process of testing units of code with a framework that
+provides infrastructure for setting up, running, and reporting tests, where a
+unit may be a function, a software module, or a unit of work (what the firmware
+must do when a user presses a button or when a specific packet arrives over a
+Bluetooth Low Energy (BLE) connection). 
+
+Tests exercise these units in isolation from other components, which forces
+attention on their functionality and makes responsibilities easier to split,
+leading to more robust software. Most C++ testing frameworks are poorly suited
+to small embedded targets because of the resulting binary size, notably from the
+standard library's ostream, so tests are commonly run on the host machine
+instead, running them on target is possible but slower, requiring compilation,
+flashing, and a report-catching mechanism on the host. The host approach raises
+concerns, since a different architecture can give data types different sizes,
+which is addressed by enforcing fixed-width types such as uint8_t or int32_t and
+using the same compiler versions, while manual target tests and system and
+integration tests add another layer of validation.
+
+Among the most used frameworks are Google Test, Catch2, Boost.Test, and
+CppUTest, and they can be tried in Compiler Explorer by adding an Execution Only
+pane, selecting x86-64 gcc 13.2, and including the library. Testing the generic
+ring buffer from the first chapter with Google Test (extended with a get_count
+method) a RingBufferInt test suite is defined through the TEST macro with two
+tests: PushPop, which verifies with EXPECT_EQ that pop returns pushed values in
+the correct order, and GetCount, which pushes 50 values into a buffer holding a
+maximum of 20, expects a count of 20, then pops 10 and expects 10. The TEST
+macro registers tests automatically, so the report appears on standard output
+without manual registration. Writing unit tests encourages thinking about how
+code interacts with other modules and produces loosely coupled, flexible
+software, and they are crucial for Test-Driven Development (TDD), where the test
+is written first, the code is written just to pass it, and more tests,
+refactoring, and iteration follow. Unit tests validate functionality but say
+little about performance, which requires running production firmware on the
+target and measuring with profiler tools.
+
+## Profiling
