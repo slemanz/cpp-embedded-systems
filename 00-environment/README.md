@@ -121,3 +121,28 @@ file is converted to binary or hex with objdump or flashing. From version 10,
 GCC also has an integrated static analyzer, enabled with the -fanalyzer flag.
 
 ## Static analyzers
+
+Static analyzers go through source code to detect potential issues such as
+undefined behavior, or to check whether the code complies with a safety standard
+such as MISRA or AUTOSAR, though capabilities vary only commercial versions
+support safety standards checks. Typical detections include use of uninitialized
+data, out-of-bounds array access, null pointer dereference, division by zero,
+and memory management issues such as use after delete and double delete. GCC's
+analyzer is enabled with the -fanalyzer flag: in a sum function taking a
+`std::array<int, 4>` constant reference, failing to initialize the ret variable
+leaves it populated with whataver occupies the allocated stack location, causing
+undefined behavior, and the analyzer issues a warning that regular warnings such
+as -Wall, -Wextra, and -Wpedantic do not catch.
+
+The flag -Wuninintialized would warn only when compiled with an optimization level other than 0, such as -O2, while the clang compiler detects the same issue on its own (a reminder that compilers and analyzers differ in capability, so running code through several of them is good practice). 
+
+A second example, accessing the fifth element of a four-element array, is also
+caught by GCC's analyzer, and -Werror makes such warnings fail compilation so no
+ELF file is generated; the trade-off is that static analysis takes more time,
+which can matter in larger code bases. Other commonly used analyzers are
+clang-tidy and cppcheck, both easy to install and use. Static analysis catches
+common programming errors and enforces compliance, but it does not guarantee
+that the code does what it is supposed to do, which requires manual tests on a
+target or unit testing of individual pieces of code.
+
+## Unit testing
