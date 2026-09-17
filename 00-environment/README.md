@@ -168,18 +168,21 @@ integration tests add another layer of validation.
 Among the most used frameworks are Google Test, Catch2, Boost.Test, and
 CppUTest, and they can be tried in Compiler Explorer by adding an Execution Only
 pane, selecting x86-64 gcc 13.2, and including the library. Testing the generic
-ring buffer from the first chapter with Google Test (extended with a get_count
-method) a RingBufferInt test suite is defined through the TEST macro with two
-tests: PushPop, which verifies with EXPECT_EQ that pop returns pushed values in
-the correct order, and GetCount, which pushes 50 values into a buffer holding a
-maximum of 20, expects a count of 20, then pops 10 and expects 10. The TEST
-macro registers tests automatically, so the report appears on standard output
-without manual registration. Writing unit tests encourages thinking about how
-code interacts with other modules and produces loosely coupled, flexible
-software, and they are crucial for Test-Driven Development (TDD), where the test
-is written first, the code is written just to pass it, and more tests,
-refactoring, and iteration follow. Unit tests validate functionality but say
-little about performance, which requires running production firmware on the
-target and measuring with profiler tools.
+ring buffer from the myths and costs with CppUTest can be seen in the [Unit
+Testing Example](examples/unit-testing/), a RingBufferInt test suite is defined
+through the TEST macro with four tests: PushPop, which verifies with
+LONGS_EQUAL that pop returns pushed values in the correct order; GetCount,
+which pushes 50 values into a buffer holding a maximum of 20, expects a count
+of 20, then pops 10 and expects 10; OverwritesTheOldestValueWhenFull, which
+checks that pushing past capacity overwrites the oldest value; and
+PopOnAnEmptyBufferReturnsADefaultValue, which checks that popping an empty
+buffer returns a default value. The TEST macro registers tests automatically,
+so the report appears on standard output without manual registration. Writing unit
+tests encourages thinking about how code interacts with other modules and
+produces loosely coupled, flexible software, and they are crucial for
+Test-Driven Development (TDD), where the test is written first, the code is
+written just to pass it, and more tests, refactoring, and iteration follow. Unit
+tests validate functionality but say little about performance, which requires
+running production firmware on the target and measuring with profiler tools.
 
 ## Profiling
