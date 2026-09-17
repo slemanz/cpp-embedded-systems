@@ -1,0 +1,1 @@
+docker run --rm -it -v "$PWD":/work -w /work/ slemanz/firmware-cpputest:0.1 make
