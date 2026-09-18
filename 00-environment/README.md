@@ -219,3 +219,20 @@ helps optimize time-critical sections of firmware and ensure the system's timing
 requirements.
 
 ## Setting Up
+
+Having explored the embedded tools ecosystem and the most widely used tools in
+the industry, the focus now shifts to setting requirements for a modern embedded
+development environment and each of its components, and then to setting up the
+enviroment to run our examples. 
+
+One of the major selling points of integrated environments is ease of use, since
+they provide everything needed through simple intallation steps. Customized
+environments, by contrast, require every component to be installed individually
+along with all of its dependencies. Because reproducible builds and a reliable
+debugging environment matter, containerizing customized environments is of great
+importance. A Docker container is provided for the development environment used
+here, but all of its components, we will analyze individually, so we can
+understand the tools used in daily work, what is necessary to comprehen and
+control the processes behind them.
+
+### Requirements for a modern software development environment
