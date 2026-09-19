@@ -236,3 +236,29 @@ understand the tools used in daily work, what is necessary to comprehen and
 control the processes behind them.
 
 ### Requirements for a modern software development environment
+
+Firmware development is no different than any other form of software development
+and the tools we use are crucial for effective work.
+
+#### Compiler
+
+Here we will use ARM GNU Toolchain, based on GCC, is free, and is the most
+commonly used free compiler for ARM development. It ships with C and C++
+compilers, the GNU Debugger (GDB), and other useful tools, such as objcopy,
+objdump and size, and the architecture needed for Arm Cortex-M is arm-none-eabi.
+
+Compiling one or a few a files is a matter of a few terminal commands, but even
+the simplest embedded project requires compiling all C and C++ sources including
+the main file and several Hardware Abstraction Layer (HAL) files, setting
+include paths, C and C++ flags, and define macros, compiling the startup
+assembly script, and configure linker options such as the linker script, static
+libraries, CPU architecture and instruction set, and standard library options,
+before converting the ELF file into formats used by flashing programs such as
+bin and hex.
+
+Doing all this manually would be tedious, so build automation becomes the next
+step. The "Make" is the common candidate, but as it is an old tool with odd
+syntax, we will use CMake, that is a more flexible and with more modern syntax,
+is used to generate Makefiles instead.
+
+#### Build automation
