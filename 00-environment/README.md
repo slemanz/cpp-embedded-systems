@@ -262,3 +262,15 @@ syntax, we will use CMake, that is a more flexible and with more modern syntax,
 is used to generate Makefiles instead.
 
 #### Build automation
+
+CMake isn't an actual build automation tool, but a generator of files for other
+automation tools (such as Make). It's cross-platform, free, and open-source
+software for the build automation process, which involves testing, packaging,
+and installing software, and it does so through a compiler-independent method.
+In practice, CMake generates targets for make that configure sources files,
+including paths and linker settings, to build ELF files, convert those ELF files
+into hex and binary formats, and start the simulator and load it with the
+generated ELF file. Build automation therefore servers not only to build the
+firmare but also to launch the simulator that runs it.
+
+#### Simulator
