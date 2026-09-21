@@ -276,13 +276,24 @@ firmare but also to launch the simulator that runs it.
 #### Simulator
 
 The examples compiled for ARM Cortex-M target run on a simulator rather than on
-physical hardware. Renode is an open source simulating framework with good
-support for ARM targets, capable of running simulations with multiple targets
-and simulating wireless and wired connections between them. Here it is used in a
-simple scenario involving simulation on single target. Renode can also start a
-GDB server, which allows a debugger to connect to it and debug the simulated
-target. Simulation execution and debugging, together with the compiler and build
-automation, are integrated with Visual Studio Code, chosen for being highly
-configurable.
+physical hardware. [Renode](https://renode.io/) is an open source simulating
+framework with good support for ARM targets, capable of running simulations with
+multiple targets and simulating wireless and wired connections between them.
+Here it is used in a simple scenario involving simulation on single target.
+Renode can also start a GDB server, which allows a debugger to connect to it and
+debug the simulated target. Simulation execution and debugging, together with
+the compiler and build automation, are integrated with Visual Studio Code,
+chosen for being highly configurable.
 
 #### Code Editor 
+
+Visual Studio Code is a modern and flexible code editor. It provides us with all
+the extensions we need to integrate all our tools into a single environment:
+
+- **C/C++:** syntax highlighting, code autocompletion, and code navigation;
+- **Cortex-Debug:** debugging via GDB;
+- **CS 128 Clang-Tidy:** integrates clang-tidy into Visual Studio Code;
+- **Dev Containers:** attaches to running a container and uses it for
+development purposes
+
+### Containerized development environment
