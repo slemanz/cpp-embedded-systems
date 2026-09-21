@@ -274,3 +274,15 @@ generated ELF file. Build automation therefore servers not only to build the
 firmare but also to launch the simulator that runs it.
 
 #### Simulator
+
+The examples compiled for ARM Cortex-M target run on a simulator rather than on
+physical hardware. Renode is an open source simulating framework with good
+support for ARM targets, capable of running simulations with multiple targets
+and simulating wireless and wired connections between them. Here it is used in a
+simple scenario involving simulation on single target. Renode can also start a
+GDB server, which allows a debugger to connect to it and debug the simulated
+target. Simulation execution and debugging, together with the compiler and build
+automation, are integrated with Visual Studio Code, chosen for being highly
+configurable.
+
+#### Code Editor 
