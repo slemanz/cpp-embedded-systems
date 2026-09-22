@@ -339,3 +339,16 @@ should use the [run.sh](run.sh), with the command:
 bash run.sh
 ```
 
+We will follow the structure of the repository
+[Cpp-in-Embedded-Systems](https://github.com/PacktPublishing/Cpp-in-Embedded-Systems)
+as the base, The project is organized into the following folders:
+
+- **app:** Contains the business layer code, including main.cpp
+- **hal:** Contains the HAL C++ code
+- **platform:** Contains platform-specific code, including the ST-provided HAL
+layer in C and the CMSIS, startup, and linker scripts
+- renode_scripts: Contains Renode simulator scripts
+
+#### The Hello World!
+
+
