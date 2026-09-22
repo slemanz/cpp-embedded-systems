@@ -297,3 +297,37 @@ the extensions we need to integrate all our tools into a single environment:
 development purposes
 
 ### Containerized development environment
+
+The Visual Studio Code Dev Containers extension allows Visual Studio Code to attach to a running
+Docker container and use all the tools inside it that have been installed. We
+will use the docker:
+
+```bash
+docker pull mahmutbegovic/cpp_in_embedded_systems:latest
+```
+
+After pull, we can create a container with:
+
+```bash
+docker run -d -it --name dev_env mahmutbegovic/cpp_in_embedded_systems:v1.1
+```
+
+To see de containers and to start:
+
+```bash
+docker ps -a
+docker start dev_env
+```
+
+To access the bash of the started container, we can use the following command:
+
+```bash
+docker exec -it dev_env /bin/bash
+```
+
+To stop the container and remove, we should use:
+
+```bash
+docker stop dev_env
+docker rm dev_env
+```
