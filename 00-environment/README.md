@@ -331,3 +331,11 @@ To stop the container and remove, we should use:
 docker stop dev_env
 docker rm dev_env
 ```
+
+To create a more complex containter, with permissions and folder from our PC, we
+should use the [run.sh](run.sh), with the command:
+
+```bash
+bash run.sh
+```
+
