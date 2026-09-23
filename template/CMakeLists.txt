@@ -23,13 +23,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # global include directories
 include_directories(
-    $(CMAKE_SOURCE_DIR)/platform/inc
-    $(CMAKE_SOURCE_DIR)/platform/CMSIS/Device/ST/STM32F0xx/Include
-    $(CMAKE_SOURCE_DIR)/platform/CMSIS/Include
-    $(CMAKE_SOURCE_DIR)/platform/STM32F0xx_HAL_Driver/Inc
-    $(CMAKE_SOURCE_DIR)/app/inc
-    $(CMAKE_SOURCE_DIR)/hal/uart/inc
-    $(CMAKE_SOURCE_DIR)/hal/inc
+    ${CMAKE_SOURCE_DIR}/platform/inc
+    ${CMAKE_SOURCE_DIR}/platform/CMSIS/Device/ST/STM32F0xx/Include
+    ${CMAKE_SOURCE_DIR}/platform/CMSIS/Include
+    ${CMAKE_SOURCE_DIR}/platform/STM32F0xx_HAL_Driver/Inc
+    ${CMAKE_SOURCE_DIR}/app/inc
+    ${CMAKE_SOURCE_DIR}/hal/uart/inc
+    ${CMAKE_SOURCE_DIR}/hal/inc
 )
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)
