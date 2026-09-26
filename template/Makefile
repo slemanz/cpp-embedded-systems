@@ -1,6 +1,12 @@
 BUILD_DIR ?= build
 BUILD_TYPE ?= Debug
 
+FORMAT                += app/src/main.cpp
+FORMAT                += hal/inc/hal.hpp
+FORMAT                += hal/uart/inc/uart.hpp
+FORMAT                += hal/uart/inc/uart_stm32.hpp
+FORMAT                += hal/uart/src/uart_stm32.cpp
+
 all: debug
 
 debug:
@@ -13,6 +19,12 @@ release:
 
 run: debug
 	cmake --build $(BUILD_DIR) --target run_in_renode
+
+format:
+	clang-format -i $(FORMAT)
+
+format-check:
+	clang-format --dry-run --Werror $(FORMAT)
 
 clean:
 	rm -rf $(BUILD_DIR)

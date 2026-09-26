@@ -26,6 +26,5 @@ void hal::uart_stm32::init()
 
 void hal::uart_stm32::putchar(char tx_char)
 {
-    HAL_UART_Transmit(&huart_, reinterpret_cast<uint8_t *>(&tx_char), 1,
-                      HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart_, reinterpret_cast<uint8_t *>(&tx_char), 1, HAL_MAX_DELAY);
 }

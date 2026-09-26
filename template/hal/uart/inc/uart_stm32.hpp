@@ -9,7 +9,7 @@
 
 namespace hal
 {
-class uart_stm32: public uart
+class uart_stm32 : public uart
 {
     public:
         uart_stm32(USART_TypeDef *inst, std::uint32_t baud = baudrate_default);

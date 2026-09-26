@@ -13,9 +13,9 @@ inline void init()
 
 struct time
 {
-    static std::uint32_t get_ms()
-    {
-        return HAL_GetTick();
-    }
+        static std::uint32_t get_ms()
+        {
+            return HAL_GetTick();
+        }
 };
 }; /* namespace hal */
