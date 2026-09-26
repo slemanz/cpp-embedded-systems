@@ -3,7 +3,7 @@ using sysbus
 mach create
 machine LoadPlatformDescription @platforms/cpus/stm32f072.repl
 
-$bin?=$ORIGIN/../build/bare.elf
+$bin?=$ORIGIN/../build/hello.elf
 
 showAnalyzer usart2
 

@@ -1,10 +1,14 @@
 cmake_minimum_required(VERSION 3.13)
 
-set(CMAKE_C_COMPILER “arm-none-eabi-gcc”)
-set(CMAKE_CXX_COMPILER “arm-none-eabi-g++”)
-set(CMAKE_ASM_COMPILER “arm-none-eabi-gcc”)
+set(CMAKE_C_COMPILER "arm-none-eabi-gcc")
+set(CMAKE_CXX_COMPILER "arm-none-eabi-g++")
+set(CMAKE_ASM_COMPILER "arm-none-eabi-gcc")
 set(CMAKE_OBJCOPY "arm-none-eabi-objcopy")
 set(CMAKE_SIZE "arm-none-eabi-size")
+
+set(RENODE "renode")
+
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 
 set(CDEFS "-DUSE_HAL_DRIVER -DSTM32F072xB")
