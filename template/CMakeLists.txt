@@ -18,9 +18,17 @@ set(CMAKE_C_FLAGS "${COMMON_FLAGS}")
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -Wno-register -fno-exceptions -fno-rtti -fno-threadsafe-statics")
 set(CMAKE_ASM_FLAGS "${COMMON_FLAGS} -x assembler-with-cpp")
 
+set(CMAKE_C_FLAGS_DEBUG "-g -gdwarf-2 -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -gdwarf-2 -O0")
+set(CMAKE_C_FLAGS_RELEASE "-O2 -flto")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -flto")
+
+
 
 project(hello VERSION 1.0.6)
 enable_language(C CXX ASM)
+
+set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
