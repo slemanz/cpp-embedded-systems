@@ -1,0 +1,10 @@
+IndentWidth: 4
+KeepEmptyLinesAtTheStartOfBlocks: false
+BreakBeforeBraces: Allman
+ColumnLimit: 100
+SpaceBeforeParens: Never
+AlignTrailingComments: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+IndentAccessModifiers: true
