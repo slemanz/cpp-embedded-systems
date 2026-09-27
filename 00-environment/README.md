@@ -339,6 +339,9 @@ should use the [run.sh](run.sh), with the command:
 bash run.sh
 ```
 
+**Important note:** to remove files created inside the docker, we will need
+sudo!
+
 We will follow the structure of the repository
 [Cpp-in-Embedded-Systems](https://github.com/PacktPublishing/Cpp-in-Embedded-Systems)
 as the base, The project is organized into the following folders:
@@ -350,5 +353,24 @@ layer in C and the CMSIS, startup, and linker scripts
 - renode_scripts: Contains Renode simulator scripts
 
 #### The Hello World!
+
+The [hello example](examples/hello/) shows what a build configuration has to
+cover for an Arm Cortex-M project. Its application code is a single main.cpp
+that initializes the HAL, brings up USART2 through a hall:uart_stm32 object,
+prints "Hello World" and then pings the same uart every 1000 ms.
+
+All the build configuration can be seen in the
+[CMakeLists.txt](examples/hello/CMakeLists.txt) and the main commands of the
+hello project are automated through a [Makefile](examples/hello/Makefile).
+Important to note that with this first container with the image, we can build
+and run the simulation through renode, but the format and tidy will not work, so
+in the others modules we will use other image.
+
+### Containerized development environment in VSCode
+
+With the Dev Containers Extension, we could open the Ctrl+shift+P (View |
+Command Palette), find the  **Dev Containers: Attach to Running Container** and
+select the dev_env. This should open a new Window where the containers name will
+be in the bottom left.
 
 
