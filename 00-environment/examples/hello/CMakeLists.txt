@@ -103,3 +103,10 @@ add_custom_target(
   COMMAND ${RENODE} --console --disable-xwt ${CMAKE_SOURCE_DIR}/renode_scripts/stm32f072.resc -e start 
   DEPENDS ${PROJECT_NAME}.elf
 )
+
+# Run elf in Renode waiting for GDB on port 3333
+add_custom_target(
+  debug_in_renode
+  COMMAND ${RENODE} --console --disable-xwt ${CMAKE_SOURCE_DIR}/renode_scripts/stm32f072_debug.resc
+  DEPENDS ${PROJECT_NAME}.elf
+)

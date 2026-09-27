@@ -23,6 +23,9 @@ release:
 run: debug
 	cmake --build $(BUILD_DIR) --target run_in_renode
 
+run_debug: debug
+	cmake --build $(BUILD_DIR) --target debug_in_renode
+
 format:
 	clang-format -i $(FORMAT)
 

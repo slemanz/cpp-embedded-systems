@@ -373,4 +373,11 @@ Command Palette), find the  **Dev Containers: Attach to Running Container** and
 select the dev_env. This should open a new Window where the containers name will
 be in the bottom left.
 
-
+With this we can open a folder inside the /work folder and work with the code
+directly from the container, from here, inside the hello folder we could open
+terminal window through **ctrl+shift+`** (view | terminal), and also set
+breakpoints in the main.cpp. To start renode, we will have to set the tasks and
+launch in [.vscode folder](examples/hello/.vscode/), and the Run -> Start
+Debugging (F5), it's possible that vscode will ask to install the extensions
+need in the remote machine (container), just install and re run if its the first
+time.
