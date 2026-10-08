@@ -1,8 +1,10 @@
 # CPP Embedded Systems
 
-0. **[Environment](00-environment/)**
-1. **[Myths and Costs](01-myths-and-costs/)** 
+**[Environment](00-environment/)**
 
-- Template
+**[Template](template/)**
+
+1. **[Myths and Costs](01-myths-and-costs/)** 
+2. **[Classes and RAII](02-classes-and-raii/)** 
 
 ---
