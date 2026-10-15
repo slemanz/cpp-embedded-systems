@@ -126,3 +126,30 @@ that case, the shared struct could contain only common data types and no methods
 as members.
 
 ### Structs
+
+Structs are commonly used in C++ for types that have only data members meant to
+be publicy available to users, and they are mostly identical to classes except
+that their default access level is public. A typical example is a struct holding
+the x, y, and z axis values of an accelerometer:
+
+```cpp
+struct accelerometer_data
+{
+    std::uint32_t x;
+    std::uint32_t y;
+    std::uint32_t z;
+};
+```
+
+Such data could be produced by a sensor class, stored in a ring_buffer class,
+and consumed by a sensor_fusion class, which means accelerometer_data acts only
+as data holder while the behavior related to that data is implemented elsewhere.
+Choosing between simple structs and classes with data and complex behavior is a
+design decision that depends on the exact application. Structs are also used to
+group functions into types, usually declaring them all as static and public, a
+struct is convenient here because its default access specifier is public, and it
+also reflects the intent, since structs are usually used when all members are
+public. Besides public and private, C++ also has the protected access specifier,
+which is related to inheritance.
+
+## Storage duration and Initialization
