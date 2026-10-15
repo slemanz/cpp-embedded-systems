@@ -63,3 +63,35 @@ through the constructor. When data members are meant to be exposed publicity,
 the common practice is to define setter and getter methods for them.
 
 ### Setters and getters
+
+For the uart class, trivial setters and getters for baudrate_ would expose the
+value through the public interface, but they add no value, since they are
+equivalent to placing baudrate_ under the public access specifier. Setters and
+getters should serve a clear purpuse, such as a setter that includes validation
+logic:
+
+```cpp
+void set_baudrate(std::uint32_t baudrate)
+{
+    if(baudrate <= c_max_baudrate)
+    {
+        baudrate_ = baudrate;
+    }else
+    {
+        baudrate_ = c_max_baudrate;
+    }
+}
+```
+
+This setter performs a sanity check and assigns the private member only when the
+value makes sense, otherwise falling back to the maximum baudrate supported by
+the system, although changing the baudrate after UART initialization makes
+little sense in practice. Exposing data members through setters and getters in
+some sense breaks encapsulation, because its idea is to hide implementation
+details, and data members are implementation details. For this reason, setters
+and especially getters should be used sparingly and only when they serve as a
+meaningful purpose. Classes can also encapsulate only functionality without
+data, or data commonly shared by all users of a class, which is done through
+static methods.
+
+### Static methods
