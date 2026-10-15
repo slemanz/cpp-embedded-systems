@@ -95,3 +95,34 @@ data, or data commonly shared by all users of a class, which is done through
 static methods.
 
 ### Static methods
+
+Static methods are C++ methods declared with the static keyword, and they are
+accessible without object instantiation. Instead of creating a uart object
+through a single-argument constructor that takes the baudrate and then calling
+init on it, the uart class can be designed as a type whose methods are all
+static: the constructor and the baudrate_ private data member are removed, and
+the baudrate is passed directly from init to calculate_uartdiv, so the method is
+called using the class name followed by a double colon:
+
+```cpp
+static void init(std::uint32_t baudrate)
+{
+    write_brr(calculate_uartdiv(baudrate));
+}
+
+// ...
+
+uart::init(115200);
+```
+
+Static methods can only use static data members and other static functions of
+the class, because non-static members require an object to be instatiated.
+Functions could also be grouped into a common unit with namespaces, but grouping
+the into a type is useful because types can be passed as template arguments. C++
+also allows types to be defined with the struct keyword, whose members are
+public by default. Historically, structs were used for compatibility with C,
+allowing a header file for a library to be shared between C and C++ programs; in
+that case, the shared struct could contain only common data types and no methods
+as members.
+
+### Structs
