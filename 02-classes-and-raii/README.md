@@ -249,3 +249,30 @@ detect problems at compile time. Class data members can also be declared with
 the static keyword, and their initialization follows special rules.
 
 ### Static member initialization
+
+Static members are not tied to individual objects of a class or struct, they are
+variables with static storage duration that any object of the class can access.
+The object_counter in the
+[static-member.cpp](examples/initialization/static-member.cpp) example
+illustrates this with a single static data member, the integer cnt, which the
+constructor increments and the destructor decrements. In main, three
+object_counter objects are created inside an unnamed scope, and the value of cnt
+is printed both inside that scope and after leaving it. Inside the scope, cnt
+equals 3 because three objects exist, and once executions exits the scope, the
+destructors are called and decrement ctn back to 0, which the program's output
+confirms.
+
+In this example, the static variable is declared in the class but defined
+outside it with a separate line:
+
+```cpp
+int object_counter::cnt = 0;
+```
+
+Since C++17, a static variable can instead be declared with te inline specifier
+inside the struct or class definition and given an initializer there, as in
+`inline static int cnt = 0;`. This makes the code more concise and easier to
+read, and it is easier to use because the variable no longer needs to be defined
+outside the class definition.
+
+## Inheritance and dynamic polymorphism
