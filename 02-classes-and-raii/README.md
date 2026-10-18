@@ -153,3 +153,68 @@ public. Besides public and private, C++ also has the protected access specifier,
 which is related to inheritance.
 
 ## Storage duration and Initialization
+
+C++ objects with automatic storage duration are initialized upon declaration and
+destroyed when execution exits the variable scope, while objects can also have a
+static storage duration. Data members of objects can likewise carry static
+storage specifiers, and specific rules govern the initialization of such
+members, which is why non-static member initialization is examined first.
+
+### Non-static member initialization
+
+Non-static class members can be initialized in different ways, and constructors
+are the first mechanism that usually comes to mind, being powerful C++ features
+that offer great control over initialization. Before turning to constructors,
+however, the starting point is default member initializers.
+
+#### Default member initializers
+
+Since C++11, default member initializers allow a default to be set for a class
+member directly in the class definition, something that would fail to compile
+under any pre-C++11 standard:
+
+```cpp
+class my_class
+{
+    int a = 4;
+    int *ptr = nullptr;
+};
+```
+
+This improves readability and avoids setting the same member as variable
+repeatedly when a class has multiple constructors, and it is particularly useful
+for pointers. Without the default initializer, ptr would hold some random value
+from memory, and dereferencing it would read from or write to a random location,
+potentially causing a serious fault. A compiler or static analyzer would detect
+this situation by reporting the use of an unintialized value, which is undefined
+behavior, but is still shows the importance of giving member variables default
+values, a task for which default member initializers are one option.
+
+#### Constructors and member initializer lists
+
+Constructors are nameless methods in a class definition that cannot be called
+explicity and are invoked when an object is initialized. A constructor that can
+be invoked with no arguments is called the default contructor, which includes
+the uart constructor `uart(std::uint32_t baud = 9600): baudrate_(baud) {}`,
+since, its default argument of 9600 is used when no argument is provided at the
+call. Using it with `uart uart1;` is called default initialization, performed
+when an object is declared with no initializer. Parentheses are omitted because
+`uart uart1();` would be interpreted by the compiler as the declaration of a
+function named uart1 that takes no arguments and returns a uart object. Since
+the constructor also accepts an argument, direct initialization such as `uart
+uart1(115200);` passes 115200 as the baud argument.
+
+The baudrate_ member is initialized through the member initializer list,
+specified after the colon and before the opening brace of the constructor body,
+with multiple items separated by commas. Se the [member initializer
+list](examples/initialization/member-initializer-list.cpp) example.
+
+Here the sensor constructor initializes a reference to a uart object and a const
+unsigned integer, read_interval_. References in C++ are similar to pointers in
+C, pointing to na already-created object, but they must be initialized when
+declared and cannot be reassigned to another object. For this reason, references
+and const-qualified members must be initialized using a member initializer list.
+Constructors can have zero or many parameters, and one with a single parameter
+declared without the explicit specifier is called a converting constructor.
+
+#### Converting constructors and explicit specifiers
