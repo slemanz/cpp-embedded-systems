@@ -218,3 +218,34 @@ Constructors can have zero or many parameters, and one with a single parameter
 declared without the explicit specifier is called a converting constructor.
 
 #### Converting constructors and explicit specifiers
+
+Converting constructors allow the compiler to implicitly convert the type of
+their argument into the type of their class. In the
+[converting-constructors.cpp](examples/initialization/converting-constructors.cpp)
+example the uart_consumer expects a uart object, yet calling
+uart_consumer(115200) compiles because the compiler uses the converting
+constructor to build a uart from 115200, so the program prints a baudrate of
+9600 for the default-constructed uart1 and 115200 for the second call. Implicit
+conversion can be unsafe and is often unwanted, and it can be prevented by
+declaring the constructor with the explicit specifier.
+
+```cpp
+explicit uart(std::uint32_t baud = 9600): baudrate_(baud){};
+```
+
+With this change, the same call fails to compile with an error stating that
+115200 cannot be converted from int to uart, which guarantees that no user of
+the class creates a potential implicit conversion leading to unwanted behavior.
+
+Calls with specific argument types can also be blocked, which is useful, for
+example, when a constructor expects a uint8_t and someone calls it with a
+uint32_t. A specific constructor can be deleted in the class declaration with
+`uart(float) = delete`, so calling `uart uart1(10000.0f);` results in a compiler
+error about the use of a deleted function. Another option is brace list
+initialization, `uart uart1{10000.0f}`, which restricts narrowing and prevents
+the float-to-integer conversion, producing a compile error about a narrowing
+conversion. This means list initialization limits implicit conversion and helps
+detect problems at compile time. Class data members can also be declared with
+the static keyword, and their initialization follows special rules.
+
+### Static member initialization
