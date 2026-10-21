@@ -297,3 +297,57 @@ the function of the derived class, C++ provides dynamic binding through virtual
 functions.
 
 ### Virtual functions
+
+To make a call through the reference A& a, bound to an object of class B,
+execute the method_1 defined in class B, method_1 must be declared as a virtual
+function in class A:
+
+```cpp
+virtual void method_1() {
+    printf("Class A, method1\r\n");
+}
+```
+
+With this change, calling method_1 on the reference produces the output defined
+in class B, meaning that class B overrides method_1 from class A. This intention
+can be made explicit in the derived class with the override keyword:
+
+```cpp
+void method_1() override {
+    printf("Class B, method1\r\n");
+}
+```
+
+The [inheritance-virtual.cpp](examples/inheritance/inheritance-virtual.cpp)
+example show that.
+
+The override keyword makes the compiler aware of the intention to override a
+virtual method from the base class, so if the overridden method is not declared
+virtual, the compiler raises an error. Virtual functions in C++ are usually
+implemented with virtual tables, which the compiler creates to store a pointer
+for every virtual function, each pointing to its overridden implementation.
+
+#### Virtual function implementation
+
+Every class that overrides a virtual function has a virtual table, a hidden
+table of function pointers, and every object of that class holds a virtual
+pointer to it, which is used at runtime to find the correct function to call.
+If class A declares method_1 and method_2 as virtual and class B overrides only
+method_2, the compiler generates a virtual table for B, and calling method_2 on
+a reference to a B object follows the virtual pointer to that table and selects
+the pointer to B's overridden implementation.
+
+This mechanism happens at runtime, and the extra layer of indirection results in
+space and time overhead. A virtual function can also be declared pure, as in
+`virtual void method_1() = 0;`, making its class an abstract class that cannot
+be instantiated, derived classes must override pure virtual functions or they
+become abstract too, so instantiating a class B that does not override method_1
+fails to compile.
+
+Abstract classes therefore shift the responsability for implementing certain
+behaviors to derived classes, and classes that have all virtual methods are
+called interfaces. Inheritance defines a hierarchical relationship in which
+class B is Class A, just as a cat is an animal, and this relationship can be
+represented in a Unified Modeling Language (UML) diagram.
+
+#### UML class diagrams
