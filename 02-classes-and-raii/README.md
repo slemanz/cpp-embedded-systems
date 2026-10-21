@@ -276,3 +276,24 @@ read, and it is easier to use because the variable no longer needs to be defined
 outside the class definition.
 
 ## Inheritance and dynamic polymorphism
+
+Inheritance allows the functionality of a class to be expanded without modifying
+it, establishing relationship between classes, in the same way that an ADXL345
+is an accelerometer. In the [inheritance.cpp](examples/inheritance/inheritance.cpp)
+example, class A is the base class and class B is derived from it, gaining
+access to the public and protected members of A.
+
+In the example, calling method_1 on object b, executes the version defined in
+class B even though class A also defines it, which is called static binding
+because the decision is made by the compiler. An object of B contains an object
+of A, so calling method_2 on b, which B does not define, invokes method_2 on the
+A part of b. In method_3, the derived class calls both a public and a protected
+method of the base class, which shows that the protected specifier exists
+precisely to grant derived classes this access. An object of a derived class can
+also be assigned to a base class reference or pointer, but calling method_1
+through the reference a executes the version from class A, another instance of
+static binding. To make a call through a base class reference or pointer execute
+the function of the derived class, C++ provides dynamic binding through virtual
+functions.
+
+### Virtual functions
