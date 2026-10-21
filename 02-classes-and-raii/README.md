@@ -351,3 +351,28 @@ class B is Class A, just as a cat is an animal, and this relationship can be
 represented in a Unified Modeling Language (UML) diagram.
 
 #### UML class diagrams
+
+UML diagrams describe software components, and when they describe the
+relationships between classes they are called UML class diagrams. The
+hierarchical relationship A and B can be visualized this way:
+
+```mermaid
+classDiagram
+    A <|-- B
+    class A {
+        +method_1()
+        +method_2()
+    }
+    class B {
+        +method_2()
+    }
+```
+
+The line connecting B to A, ending in a hollow, unfilled triangular arrowhead
+pointing to A, means that B is A, and the diagram also shows the methods
+available in both classes. UML diagrams are also useful for describing design
+patterns and visualizing the relationships between software components.
+Together, inheritance and virtual functions, which achieve dynamic binding,
+provide the means for dynamic (runtime) polymorphism.
+
+### Dynamic polymorphism
