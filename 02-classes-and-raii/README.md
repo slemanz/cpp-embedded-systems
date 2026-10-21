@@ -376,3 +376,55 @@ Together, inheritance and virtual functions, which achieve dynamic binding,
 provide the means for dynamic (runtime) polymorphism.
 
 ### Dynamic polymorphism
+
+Polymorphism is a mechanism that provides a single interface for different
+types, and it can be static or dynamic. Dynamic polymorphism in C++ is achieved
+through inheritance and virtual functions, and it is also called subtyping
+because it treats derived classes through the interface of the base class.
+
+A library for GSM modems illustrates this, such modems usually communicate with
+the host microcontroller over UART, but a microcontroller may have several UART
+peripherals, such as UART and LPUART on STM32, and the library may need to run
+on different microcontrollers. For this reason, the library can rely on a common
+uart interface, while each platform provides its own implementation of it.
+
+```mermaid
+classDiagram
+    direction TB
+    class uart_stm32 {
+        +init(uint32_t baudrate) void
+        +write(span~const char~) void
+    }
+    class uart {
+        <<interface>>
+        +init(uint32_t baudrate) void
+        +write(span~const char~) void
+    }
+    class gsm_lib {
+        -uart_ uart&
+        +init() void
+    }
+    uart <|-- uart_stm32
+    gsm_lib --> uart
+```
+
+In the [polimorphism-host.cpp](examples/polymorphism-host/polymorphism-host.cpp)
+example, the uart class has two pure virtual functions, which makes it an
+interface class, and uart_stm32 inherits and implements it.
+
+In main, a uart_stm32 object is created and its reference is passed to the
+gsm_lib constructor, where it initializes a private member reference to the uart
+interface. This design makes the library flexible enough to be used on different
+platforms, and it also allows the communication between the library and the GSM
+modem to be debugged by supplying a UART implementation that acts as a tap,
+redirecting reads and writes while logging them.
+
+The same example, could be adapt to run in our real target as shown in
+[polymorphism](examples/polymorphism/) example folder, with the main files
+being:
+
+- [main.cpp](examples/polymorphism/app/src/main.cpp)
+- [hal.hpp](examples/polymorphism/hal/inc/hal.hpp)
+- [uart.hpp](examples/polymorphism/hal/uart/inc/uart.hpp)
+- [uart_stm32.hpp](examples/polymorphism/hal/uart/inc/uart_stm32.hpp)
+- [uart_stm32.cpp](examples/polymorphism/hal/uart/src/uart_stm32.cpp)
