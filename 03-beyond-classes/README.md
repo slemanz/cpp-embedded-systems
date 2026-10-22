@@ -85,3 +85,37 @@ This makes code more readable, since identifiers stay short without C-style
 prefixes.
 
 ## Function overloading
+
+Besides functions with the same name in different classes, C++ allows functions
+with the same in the same scope to take different parameters, which are called
+overload functions. Instead of names like print_int and print_float, the same
+name is used and the compiler picks the right function at the call site based on
+the arguments passed:
+
+```cpp
+void print(int a)   { printf("Int %d\r\n", a); }
+void print(float a) { printf("Float %2.f\r\n", a); }
+
+print(2);   // int version
+print(2.f)  // float version
+```
+
+To tell overloads apart, the compiler uses name mangling, encoding extra
+information such as parameter types into function names so each overload gets a
+unique symbol, as in "_Z5printi" and "_Z5printf" in the assembly output.
+Overloaded functions may differ in the number of arguments, but not in return
+type alone, since two functions with the same name and arguments are treated as
+redeclaration and cause a compile error:
+
+```cpp
+int print(int a);
+void print(int a); // error
+```
+
+Function overloading is a basic but powerful feature that provides compile-time,
+or static, polymorphism.
+
+The [function-overloading.cpp](examples/overloading/function-overloading.cpp) shows
+a running example.
+
+## Interoperability with C
