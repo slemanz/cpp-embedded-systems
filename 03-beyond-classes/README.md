@@ -119,3 +119,55 @@ The [function-overloading.cpp](examples/overloading/function-overloading.cpp) sh
 a running example.
 
 ## Interoperability with C
+
+Some of the previous examples in the repository run in renode simulator, they
+mix C++ and C code, relying on the vendor-provided HAL library and Arm's Common
+Microcontroller Software Interface Standard (CMSIS), both written in C and kept
+in the platform folder. The "add_executable" function in CMakeList.txt lists
+many C files from that folder alongside just a few C++ files, such as main.cpp
+and uart_stm32.cpp. Each C and C++ file is translation unit built separately by
+the C and C++ compilers respectively, and the resulting object files are then
+linked into a single ELF file.
+
+### External and Language Linkage in C++
+
+Variables and functions with external linkage can be linked with code in other
+translation unit as long as the compiler has access to their declarations, and
+their language linkage property is what allows C++ to be linked with C code,
+declared with the following syntax:
+
+```cpp
+extern "C" {
+    void c_func();
+}
+```
+
+A declaration with C language linkage follows C linkage conventions, which
+prevents name mangling, among other things, so it links properly with code
+compiled in a C translation unit.
+
+### C standard library in C++
+
+C++ wraps the C standard library in headers with a "c" prefix and no extension,
+such as `<cstdlib>` for `<stdlib.h>`, and in GCC these wrappers include the
+original C headers, which ensure C++ compability by adding a C language linkage
+specifier when compiled by a C++ compiler, a practice also followed by vendor
+HAL implementations such as the STM32F0xx HAL headers:
+
+```cpp
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// declarations
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+Since C libraries are often used in C++ programs, especially in embedded
+projects, it is always a good idea to guard them, and headers that lack internal
+guards can be wrapped at the include site with `extern "C" { # include "c_library.h" }`.
+
+## References
