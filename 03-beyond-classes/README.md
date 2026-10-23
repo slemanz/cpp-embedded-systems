@@ -171,3 +171,71 @@ projects, it is always a good idea to guard them, and headers that lack internal
 guards can be wrapped at the include site with `extern "C" { # include "c_library.h" }`.
 
 ## References
+
+References are aliases for objects, so they must be initialized immediately, and
+since they are not objects themselves, there are no pointers to references or
+arrays of references. C++ has two types of references, lvalue references and
+rvalue references.
+
+### Value categories
+
+C++ expressions belong to one of two value categories, lvalue or rvalue, a
+simplified division with historical origins. Lvalues usually appear on the left
+side of an assignment, though not always, and they have an addres the program
+can access:
+
+```cpp
+int a = 42;     // a is lvalue
+int b = a;      // a can also appear on the right side
+int *p = &a;    // pointer p is lvalue
+```
+
+Rvalues usually appear on the right side of an assignment and can be thought of
+as temporary values, such as literals, function calls that do not return
+references, and built-in operator calls like "a+16" or "sizeof(int)". An rvalue
+can still appear on the left side of an assignment, as in the following
+expression, where a temporary "my_struct" created by the default constructor
+receives a copy of another temporary built with the "int" constructor, printing
+"a_ = 16" ([rvalue.cpp](examples/references/rvalue.cpp)):
+
+```cpp
+printf("a_ = %d\r\n", (my_struct()=my_struct(16)).a_);
+```
+
+### Lvalue references
+
+Lvalue references are aliases for existing objects, declared by adding "&" to
+the type name, and they can also be const-qualified, as seen in the
+[lvalue-refs.cpp](examples/references/lvalue-refs.cpp) example. The object can
+be manipulated through the reference, while any attempt to change the value
+through a constant reference results in a compiler error.
+
+### Rvalue references
+
+Rvalue references, declared with "&&" next to the type name, extend the lifetime
+of temporary rvalues and cannot be bound to lvalues, since doing so causes a
+compiler error:
+
+```cpp
+int&& a = 42;
+int b = 0;
+// int&& b_ref = b; compiler error
+int&& b_ref = b + 10; // ok, b + 10 is rvalue
+```
+
+They are important for resource management and are used in move semantics, which
+allows resources to be moved from one object to another. std::vector illustrates
+this with two "push_back" overloads in the
+[rvalue-refs.cpp](examples/references/rvalue-refs.cpp) example. One taking
+"const T&", which copies the value, and one taking "T&&", which moves it so the
+new element takes ownership of the value's dynamically allocated resources.
+
+```cpp
+v.push_back(str);            // copy: str unchanged, new data address
+v.push_back(std::move(str)); // move: str left valid but unspecified, often empty
+```
+
+std:move casts str to an rvalue reference, signaling that its resources can be
+moved instead of copied. The printed addresses confirm it to us.
+
+## Standard library containers and algorithms
