@@ -239,3 +239,50 @@ std:move casts str to an rvalue reference, signaling that its resources can be
 moved instead of copied. The printed addresses confirm it to us.
 
 ## Standard library containers and algorithms
+
+### Array
+
+std::array allocates a contiguous block of memory on the stack and works as a
+simple wrapper of a C-style array, a templated type instantiated with an
+underlying data type and a size that is part of the type. It is safer than a
+C-style array because element access through "at()" throws an exception on an
+out-of-bounds index, allowing runtime errors to be caught and handled, or, with
+exceptions disabled, handled by a global terminate handler. It can also serve as
+the base of a vector-like container, fixed_vector, which inherits from
+std::array and implements push_back, back, pop_back, end, and empty, tracking
+stored elements with private counter.
+
+```cpp
+template <typename T, size_t S> class fixed_vector : public std::array<T, S>
+{
+    public:
+        void push_back(const T &el)
+        {
+            if(cnt_ < S){ this->at(cnt_) = el; ++cnt_; } // fails silently when full
+        }
+        // back, pop_back, end, empty...
+    private:
+        size_t cnt_ = 0;
+};
+```
+
+This makes fixed_vector usable as the underlying container for adaptors such as
+std::stack and std::priority_queue.
+
+### Container adaptors
+
+std::stack is a simple Last In-First out (LIFO) container adaptor, while
+std::priority_queue sorts elements as they are inserted, and both can be
+instantiated with fixed_vector as the underlying container:
+
+```cpp
+std::priority_queue<int, fixed_vector<int, 10>> pq;
+std::stack<int, fixed_vector<int, 10>> st;
+```
+
+Can be the use in the [adaptors.cpp](examples/standard/adaptors.cpp) example,
+popping the same inserted values give the priority queue gets sorted. The
+standard library offers, many more containers, as well as algorithms that
+operate on them.
+
+## Algorithms
