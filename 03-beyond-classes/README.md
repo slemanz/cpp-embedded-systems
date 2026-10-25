@@ -286,3 +286,28 @@ standard library offers, many more containers, as well as algorithms that
 operate on them.
 
 ## Algorithms
+
+C++ standard library offers a huge set of templated algorithm functions
+contained in the algorithm header that play well with different container types.
+
+### std::copy and std::copy_if
+
+std::copy and std::copy_if copy elements from one container to another, with
+std::copy_if also accepting a predicate function that decides whether each
+element is copied, as seen in the [copy-if.cpp](examples/algorithms/copy-if.cpp)
+example.
+
+Also in this example std::iota from the `<numeric>` header fills src with
+incrementing values starting at 0, and std::copy_if copies into dst only the
+elements greater than 3.
+
+### Sort
+
+std::sort sorts the elements of a container, as in the
+[sort.cpp](examples/algorithms/sort.cpp) example, where std::transform first
+applies a rand lambda to every member of src, using types from the `<random>`
+header to generate numbers between 1 and 6.
+
+The array could have been filled with a for loop, but std::transform was used to
+demonstrate it, and the standard library offers many more algorithms for solving
+common tasks with containers.
